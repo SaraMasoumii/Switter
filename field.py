@@ -24,7 +24,7 @@ class Field:
                 return False
 
             try:
-                datetime.datetime.strptime(value, '%Y-%m-%d')
+                datetime.datetime.strptime(value, '%Y/%m/%d')
                 return True
 
             except ValueError:
