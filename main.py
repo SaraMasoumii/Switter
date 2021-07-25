@@ -3,6 +3,7 @@ from database import Database
 d = Database('schema.txt')
 
 t = d._tables['User']
-row = { 'username': 'Sarah Genius', 'password' : 'Amir ham bahooshe', 'joined_at': '2021-12-11' }
-t.addRow(row)
+
+d.query('INSERT INTO User VALUES (eminem,ee,2021/02/01);')
+
 print(t.selectRow())
