@@ -26,6 +26,9 @@ class Table:
             if self._fields[key].unique and (val in self._columns[key]):
                 raise ValueError('Duplicate value!')
         
+        if len(self._fields) != len(data):
+            raise ValueError('Not enough fields!')
+
         for key, val in data.items():
             self._columns[key].append(val)
 
