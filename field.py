@@ -13,10 +13,14 @@ class Field:
 
         t = self.type
         if t == 'INTEGER':
-            return type(value) == int
+            try:
+                int(t)
+                return True
+            except:
+                return False
 
         elif t == 'BOOLEAN':
-            return type(value) == bool
+            return t == '1' or t == '0'
 
         elif t == 'TIMESTAMP':
 
