@@ -36,13 +36,43 @@ class Database:
 		pass
 
 	def __select(self, query: str) -> List[Dict[str, str]]:
-		pass
+		que = query.split(' WHERE ')
+		tableName = que[0].split()[-1]
+		table = self._tables[tableName]
+		ids: Set[str] = self.__where(table, que[1])
+		table.getRows(ids)
 
 	def __delete(self, query: str) -> None:
-		pass
+		que = query.split(' WHERE ')
+		tableName = que[0].split()[-1]
+		table = self._tables[tableName]
+		ids: Set[str] = self.__where(table, que[1])
+		table.deleteRows(ids)
 
 	def __update(self, query: str) -> None:
-		pass
+		que1 = query.split(' WHERE ')
+		que2 = que1[1].split(' VALUES ')
+		que3 = que2[1][1 : -2]
+		tableName = que1[0].split()[-1]
+		table = self._tables[tableName]
+		ids: Set[str] = self.__where(table, que2[0])
+
+		if len(ids) > 1:
+			raise ValueError('There are more than one row with this conditions!')
+
+		id = list(ids)[0]
+
+		valueList = que3.split(',')
+		newData: Dict[str, str] = {}
+		tableFields = list(table._fields.keys())
+
+		newData = {tableFields[i]: valueList[i] for i in range(len(valueList))}
+
+		#for i in range(len(valueList)):
+			#newData[tableFields[i]] = valueList[i]
+
+		table.updateRow(id, newData)
+
 
 	def __insert(self, query: str) -> None:
 
@@ -63,10 +93,11 @@ class Database:
 				valueList.append(tmp)
 				tmp = ''
 
-		data = {}
 		tableFields = list(table._fields.keys())
-		for i in range(len(valueList)):
-			data[tableFields[i]] = valueList[i]
+		#for i in range(len(valueList)):
+			#data[tableFields[i]] = valueList[i]
+
+		data = {tableFields[i]: valueList[i] for i in range(len(valueList))}
 
 		table.addRow(data)
 
@@ -79,6 +110,12 @@ class Database:
 
 		elif 'SELECT FROM' in query:
 			self.__select(query)
+
+		elif 'DELETE FROM' in query:
+			self.__delete(query)
+
+		elif 'UPDATE' in query:
+			self.__update(query)
 
 
 

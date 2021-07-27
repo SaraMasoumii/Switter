@@ -4,9 +4,7 @@ d = Database('schema.txt')
 
 t = d._tables['User']
 
-d.query('INSERT INTO User VALUES (eminem,ee,2021/02/01);')
-
+d.query('INSERT INTO User VALUES (sarah,ee,2021/02/01);')
 print(t._rows)
-ids = t.selectRows(True, 'username', 'eminem')
-t.deleteRows(ids)
+d.query('DELETE FROM User WHERE username==”sarah” OR phone==”09171656786”;')
 print(t._rows)
