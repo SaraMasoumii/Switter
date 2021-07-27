@@ -37,7 +37,8 @@ class Table:
         self._rows[self.generateID()] = row
 
         for key, val in row.items():
-            self._columns[key].append(val)        
+            self._columns[key].append(val)
+
 
     def getRow(self, id: str) -> Dict[str, str]:
         return copy.deepcopy(self._rows[id])
@@ -48,6 +49,21 @@ class Table:
             rows.append(self.getRow(id))
 
         return rows
+
+    def deleteRow(self, id: str) -> None:
+        del self._rows[id]
+
+    def deleteRows(self, ids: Set[str]) -> None:
+        for id in ids:
+            self.deleteRow(id)
+
+    def updateRow(self, id: str, newData: Dict[str, str]) -> Dict[str, str]:
+        for key in self._rows[id]:
+            if key in newData:
+                self._rows[id][key] = newData[key]
+                
+        return self._rows[id]
+
 
     def selectRows(self, equal: bool, field: str, value: str) -> Set[str]:
         if field not in self._fields:
