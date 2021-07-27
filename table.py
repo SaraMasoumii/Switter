@@ -1,4 +1,5 @@
 import copy
+from file import File
 import uuid
 from typing import Any, Dict, List, Set
 
@@ -7,13 +8,39 @@ from field import Field
 
 class Table:
 
-    def __init__(self, fields: Dict[str, Field]) -> None:
+    def __init__(self, filePath: str, fields: Dict[str, Field]) -> None:
 
+        self._file = File(filePath)
         self._rows: Dict[str, Dict[str, str]] = {}
         self._columns: Dict[str, List[str]] = {}
         self._fields = copy.deepcopy(fields)
         for key in self._fields:
             self._columns[key] = []
+        
+
+    def save(self) -> None:
+        lines = []
+        lines.append('#' + ' ' + ' '.join(self._fields.keys()))
+        for id, row in self._rows.items():
+            lines.append(id + ' ' + ' '.join(row.values()))
+        self._file.write(lines)
+
+    def load(self) -> None:
+        
+        self._rows: Dict[str, Dict[str, str]] = {}
+        self._columns: Dict[str, List[str]] = {}
+        for key in self._fields:
+            self._columns[key] = []
+        
+        lines = list(self._file.read())
+        fields = list(self._fields.keys())
+        for line in lines[1:]:
+            values = map(str, line.split())
+            id = values.pop(0)
+            row = {}
+            for i in range(len(values)):
+                row[fields[i]] = values[i]
+            self._rows[id] = row
 
     def generateID(self) -> str:
         return str(uuid.uuid4())
@@ -36,10 +63,13 @@ class Table:
 
         self.checkRow(data)
         row = copy.deepcopy(data)
-        self._rows[self.generateID()] = row
+        id = self.generateID()
+        self._rows[id] = row
 
         for key, val in row.items():
             self._columns[key].append(val)
+        
+        self._file.write([id + ' ' + ' '.join(row.values())], True)
 
     def getRow(self, id: str) -> Dict[str, str]:
         if id not in self._rows:

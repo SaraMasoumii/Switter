@@ -21,7 +21,7 @@ class Database:
 		for line in schemaFile.read():
 
 			if line == '' or line == '\n':
-				self._tables[tableName] = Table(fields)
+				self._tables[tableName] = Table(tableName, fields)
 				fields.clear()
 
 			parts = line.split()
