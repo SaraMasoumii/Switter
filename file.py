@@ -1,7 +1,6 @@
 
 from typing import List
 
-
 class File:
 
 	def __init__(self, path: str) -> None:
