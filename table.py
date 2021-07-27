@@ -37,13 +37,15 @@ class Table:
         self._rows[self.generateID()] = row
 
         for key, val in row.items():
-            self._columns[key].append(val)
+            self._columns[key].append(val)        
 
+    def getRow(self, id: str) -> Dict[str, str]:
+        return copy.deepcopy(self._rows[id])
 
     def getRows(self, ids: Set[str]) -> List[Dict[str, str]]:
         rows = []
-        for i in ids:
-            rows.append(self._rows[i])
+        for id in ids:
+            rows.append(self.getRow(id))
 
         return rows
 

@@ -31,10 +31,17 @@ class Database:
 
 			elif len(parts) > 1:
 				fields[parts[0]] = Field(parts[-1], len(parts) == 3)
-		
 
+	def __where(self, table: Table, query: str) -> Set[str]:
+		pass
 
 	def __select(self, query: str) -> List[Dict[str, str]]:
+		pass
+
+	def __delete(self, query: str) -> None:
+		pass
+
+	def __update(self, query: str) -> None:
 		pass
 
 	def __insert(self, query: str) -> None:
