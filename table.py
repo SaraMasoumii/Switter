@@ -14,7 +14,6 @@ class Table:
         self._fields = copy.deepcopy(fields)
         for key in self._fields:
             self._columns[key] = []
-        self._columns['#'] = []
 
     def generateID(self) -> str:
         return str(uuid.uuid4())
