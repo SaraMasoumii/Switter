@@ -18,8 +18,7 @@ class Table:
     def generateID(self) -> str:
         return str(uuid.uuid4())
 
-    def addRow(self, data: Dict[str, str]) -> None:
-
+    def checkRow(self, data: Dict[str, str]) -> None:
         for key, val in data.items():
             if key not in self._fields:
                 raise ValueError(f'{key} key is not in fields!')
@@ -33,37 +32,36 @@ class Table:
         if len(self._fields) != len(data):
             raise ValueError('Not enough fields!')
 
+    def addRow(self, data: Dict[str, str]) -> None:
+
+        self.checkRow(data)
         row = copy.deepcopy(data)
         self._rows[self.generateID()] = row
 
         for key, val in row.items():
             self._columns[key].append(val)
 
-
     def getRow(self, id: str) -> Dict[str, str]:
+        if id not in self._rows:
+            raise ValueError("ID doesn't exist!")
         return copy.deepcopy(self._rows[id])
 
     def getRows(self, ids: Set[str]) -> List[Dict[str, str]]:
-        rows = []
-        for id in ids:
-            rows.append(self.getRow(id))
-
-        return rows
+        return [self.getRows(id) for id in ids]
 
     def deleteRow(self, id: str) -> None:
-        del self._rows[id]
+        if id not in self._rows:
+            raise ValueError("ID doesn't exist!")
+        self._rows.pop(id)
 
     def deleteRows(self, ids: Set[str]) -> None:
         for id in ids:
             self.deleteRow(id)
 
-    def updateRow(self, id: str, newData: Dict[str, str]) -> Dict[str, str]:
+    def updateRow(self, id: str, newData: Dict[str, str]) -> None:
+        self.checkRow(newData)
         for key in self._rows[id]:
-            if key in newData:
-                self._rows[id][key] = newData[key]
-                
-        return self._rows[id]
-
+            self._rows[id][key] = newData[key]
 
     def selectRows(self, equal: bool, field: str, value: str) -> Set[str]:
         if field not in self._fields:
