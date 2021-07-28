@@ -1,9 +1,8 @@
 from typing import Dict, List, Set
 
-from field import Field
-from file import File
-from table import Table
-
+from database.field import Field
+from database.file import File
+from database.table import Table
 
 class Database:
 
@@ -20,7 +19,7 @@ class Database:
 		
 		for line in schemaFile.read():
 			if line == '':
-				self._tables[tableName] = Table(f'tables/{tableName.lower()}.txt', fields)
+				self._tables[tableName] = Table(f'backend/tables/{tableName.lower()}.txt', fields)
 				fields.clear()
 
 			parts = line.split()

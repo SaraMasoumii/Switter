@@ -1,9 +1,9 @@
 import copy
 import uuid
-from typing import Any, Dict, List, Set
+from typing import Dict, List, Set
 
-from field import Field
-from file import File
+from database.field import Field
+from database.file import File
 
 
 class Table:

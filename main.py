@@ -1,4 +1,5 @@
-from database import Database
+from database import *
+from application import *
 
 d = Database('schema.txt')
 
