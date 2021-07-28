@@ -19,7 +19,6 @@ class Database:
 		schemaFile = File(schemaPath)
 		
 		for line in schemaFile.read():
-
 			if line == '':
 				self._tables[tableName] = Table(f'tables/{tableName.lower()}.txt', fields)
 				fields.clear()
@@ -108,7 +107,3 @@ class Database:
 
 		elif 'UPDATE' in query:
 			self.__update(query)
-
-
-
-

@@ -39,6 +39,12 @@ class Table:
 			id = values.pop(0)
 			row = { fields[i] : values[i] for i in range(len(values)) }
 			self.checkRow(row)
+			# Very Slow !!!!
+			for key, val in row.items():
+				if self._fields[key].unique:
+					for _id, _row in rows.items():
+						if _row[key] == val:
+							raise ValueError('Duplicate value!')
 			rows[id] = row
 		self._rows = rows
 
