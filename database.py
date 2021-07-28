@@ -1,7 +1,7 @@
-from file import File
 from typing import Dict, List, Set
 
 from field import Field
+from file import File
 from table import Table
 
 
@@ -20,8 +20,8 @@ class Database:
 		
 		for line in schemaFile.read():
 
-			if line == '' or line == '\n':
-				self._tables[tableName] = Table(f'{tableName.lower()}.txt', fields)
+			if line == '':
+				self._tables[tableName] = Table(f'tables/{tableName.lower()}.txt', fields)
 				fields.clear()
 
 			parts = line.split()
@@ -68,14 +68,9 @@ class Database:
 
 		newData = {tableFields[i]: valueList[i] for i in range(len(valueList))}
 
-		#for i in range(len(valueList)):
-			#newData[tableFields[i]] = valueList[i]
-
 		table.updateRow(id, newData)
 
-
 	def __insert(self, query: str) -> None:
-
 		qlist = query.split()
 		if qlist[2] not in self._tables:
 			raise ValueError('Table not exist!')
@@ -94,10 +89,7 @@ class Database:
 				tmp = ''
 
 		tableFields = list(table._fields.keys())
-		#for i in range(len(valueList)):
-			#data[tableFields[i]] = valueList[i]
-
-		data = {tableFields[i]: valueList[i] for i in range(len(valueList))}
+		data = { tableFields[i]: valueList[i] for i in range(len(valueList)) }
 
 		table.addRow(data)
 

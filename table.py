@@ -13,27 +13,27 @@ class Table:
 		self._file = File(filePath)
 		self._fields = copy.deepcopy(fields)
 		self._rows: Dict[str, Dict[str, str]] = {}
-		self._columns: Dict[str, List[str]] = {}
-		for key in self._fields:
-			self._columns[key] = []
 		try:
 			self.load()
 		except Exception as e:
 			self.save()
+			print(e)
 
 	def save(self) -> None:
 		lines = []
 		lines.append('#' + ' ' + ' '.join(self._fields.keys()))
-		for id, row in self._rows.items():
-			lines.append(id + ' ' + ' '.join(row.values()))
+		for id in self._rows:
+			lines.append(self.textRow(id))
 		self._file.write(lines)
 
 	def load(self) -> None:
 		rows = {}
 		lines = list(self._file.read())
 		fields = list(self._fields.keys())
+		if '#' + ' ' + ' '.join(fields) != lines[0]:
+			raise ValueError('Incorrect Fields!')
 		for line in lines[1:]:
-			if line == '\n':
+			if line == '':
 				continue
 			values = list(map(str, line.split()))
 			id = values.pop(0)
@@ -41,12 +41,14 @@ class Table:
 			self.checkRow(row)
 			rows[id] = row
 		self._rows = rows
-		for row in rows.values():
-			for key, val in row.items():
-				self._columns[key].append(val)
 
 	def generateID(self) -> str:
 		return str(uuid.uuid4())
+
+	def textRow(self, id = str) -> str:
+		if id not in self._rows:
+			raise ValueError("ID doesn't exist!")
+		return id + ' ' + ' '.join(self._rows[id].values())
 
 	def checkRow(self, data: Dict[str, str]) -> None:
 		for key, val in data.items():
@@ -56,23 +58,21 @@ class Table:
 			if not self._fields[key].isValueble(val):
 				raise ValueError(f'Value is not type of {self._fields[key].type}!')
 
-			if self._fields[key].unique and (val in self._columns[key]):
-				raise ValueError('Duplicate value!')
-
 		if len(self._fields) != len(data):
 			raise ValueError('Not enough fields!')
 
 	def addRow(self, data: Dict[str, str]) -> None:
-
 		self.checkRow(data)
+		for key, val in data.items():
+			if self._fields[key].unique:
+				for id, row in self._rows.items():
+					if row[key] == val:
+						raise ValueError('Duplicate value!')
+
 		row = copy.deepcopy(data)
 		id = self.generateID()
 		self._rows[id] = row
-
-		for key, val in row.items():
-			self._columns[key].append(val)
-		
-		self._file.write([id + ' ' + ' '.join(row.values())], True)
+		self._file.write([self.textRow(id)], True)
 
 	def getRow(self, id: str) -> Dict[str, str]:
 		if id not in self._rows:
@@ -85,6 +85,7 @@ class Table:
 	def deleteRow(self, id: str) -> None:
 		if id not in self._rows:
 			raise ValueError("ID doesn't exist!")
+		self._file.replace(self.textRow(id), '')
 		self._rows.pop(id)
 
 	def deleteRows(self, ids: Set[str]) -> None:
@@ -93,8 +94,16 @@ class Table:
 
 	def updateRow(self, id: str, newData: Dict[str, str]) -> None:
 		self.checkRow(newData)
+		for key, val in newData.items():
+			if self._fields[key].unique:
+				for _id, row in self._rows.items():
+					if _id != id and row[key] == val:
+						raise ValueError('Duplicate value!')
+		oldRow = self.textRow(id)
 		for key in self._rows[id]:
 			self._rows[id][key] = newData[key]
+		newRow = self.textRow(id)
+		self._file.replace(oldRow, newRow)
 
 	def selectRows(self, equal: bool, field: str, value: str) -> Set[str]:
 		if field not in self._fields:

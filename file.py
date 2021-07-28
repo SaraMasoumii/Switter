@@ -9,8 +9,8 @@ class File:
 	def read(self):
 		with open(self.path, 'r') as file:
 			for line in file:
-				yield line
-		yield '\n'
+				yield line.rstrip()
+		yield ''
 
 	def write(self, lines: List[str], append: bool = False) -> None:
 		mode = 'w'
@@ -19,3 +19,12 @@ class File:
 		with open(self.path, mode) as file:
 			for line in lines:
 				file.write(line + '\n')
+
+	def replace(self, old: str, new: str) -> None:
+		with open(self.path, 'r') as file :
+  			data = file.read()
+		data = data.replace(old, new)
+		data = data.replace('\n\n', '\n')
+		with open(self.path, 'w') as file:
+  			file.write(data)
+	
