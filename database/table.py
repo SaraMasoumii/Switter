@@ -15,9 +15,8 @@ class Table:
 		self._rows: Dict[str, Dict[str, str]] = {}
 		try:
 			self.load()
-		except Exception as e:
+		except:
 			self.save()
-			print(e)
 
 	def save(self) -> None:
 		lines = []
@@ -39,6 +38,8 @@ class Table:
 			id = values.pop(0)
 			row = { fields[i] : values[i] for i in range(len(values)) }
 			self.checkRow(row)
+			if id in rows:
+				raise ValueError('Duplicate value!')
 			# Very Slow !!!!
 			for key, val in row.items():
 				if self._fields[key].unique:
@@ -86,7 +87,7 @@ class Table:
 		return copy.deepcopy(self._rows[id])
 
 	def getRows(self, ids: Set[str]) -> List[Dict[str, str]]:
-		return [self.getRows(id) for id in ids]
+		return [self.getRow(id) for id in ids]
 
 	def deleteRow(self, id: str) -> None:
 		if id not in self._rows:

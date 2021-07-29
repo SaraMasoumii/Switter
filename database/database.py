@@ -1,4 +1,4 @@
-from typing import Dict, List, Set
+from typing import Dict, List, Set, final
 
 from database.field import Field
 from database.file import File
@@ -30,21 +30,53 @@ class Database:
 			elif len(parts) > 1:
 				fields[parts[0]] = Field(parts[-1], len(parts) == 3)
 
+	def __simpleWhere(self, table: Table, query: str) -> Set[str]:
+		qlist = query.split()
+		finalSet: Set[str] = set()
+		lastOperator = 'OR'
+		for i in range(len(qlist)):
+			tmp = qlist[i]
+			if i % 2 == 0:
+				if '==' in tmp:
+					tmpList = tmp.split('==')
+					equal = True
+				elif '!=' in tmp:
+					tmpList = tmp.split('!=')
+					equal = False
+				else:
+					raise ValueError('Invalid syntax!')
+				
+				key = tmpList[0]
+				value = tmpList[1]
+				value = value.replace('"', '')
+				value = value.replace("'", '')
+				currentSet = table.selectRows(equal, key, value)
+				if lastOperator == 'OR':
+					finalSet = finalSet | currentSet
+				elif lastOperator == 'AND':
+					finalSet = finalSet & currentSet
+				else:
+					raise ValueError('Invalid syntax!')
+			else:
+				lastOperator = tmp
+		return finalSet
+
+
 	def __where(self, table: Table, query: str) -> Set[str]:
-		pass
+		return self.__simpleWhere(table, query)
 
 	def __select(self, query: str) -> List[Dict[str, str]]:
 		que = query.split(' WHERE ')
 		tableName = que[0].split()[-1]
 		table = self._tables[tableName]
-		ids: Set[str] = self.__where(table, que[1])
-		table.getRows(ids)
+		ids: Set[str] = self.__where(table, que[1][:-1])
+		return table.getRows(ids)
 
 	def __delete(self, query: str) -> None:
 		que = query.split(' WHERE ')
 		tableName = que[0].split()[-1]
 		table = self._tables[tableName]
-		ids: Set[str] = self.__where(table, que[1])
+		ids: Set[str] = self.__where(table, que[1][:-1])
 		table.deleteRows(ids)
 
 	def __update(self, query: str) -> None:
@@ -53,7 +85,7 @@ class Database:
 		que3 = que2[1][1 : -2]
 		tableName = que1[0].split()[-1]
 		table = self._tables[tableName]
-		ids: Set[str] = self.__where(table, que2[0])
+		ids: Set[str] = self.__where(table, que2[0][:-1])
 
 		if len(ids) > 1:
 			raise ValueError('There are more than one row with this conditions!')
@@ -96,13 +128,13 @@ class Database:
 			raise ValueError('Need a ; in the end of query')
 
 		if 'INSERT INTO' in query:
-			self.__insert(query)
+			return self.__insert(query)
 
 		elif 'SELECT FROM' in query:
-			self.__select(query)
+			return self.__select(query)
 
 		elif 'DELETE FROM' in query:
-			self.__delete(query)
+			return self.__delete(query)
 
 		elif 'UPDATE' in query:
-			self.__update(query)
+			return self.__update(query)
