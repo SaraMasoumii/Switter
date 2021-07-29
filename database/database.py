@@ -19,7 +19,7 @@ class Database:
 		
 		for line in schemaFile.read():
 			if line == '':
-				self._tables[tableName] = Table(f'backend/tables/{tableName.lower()}.txt', fields)
+				self._tables[tableName] = Table(f'database/tables/{tableName.lower()}.txt', fields)
 				fields.clear()
 
 			parts = line.split()
