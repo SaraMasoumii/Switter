@@ -1,3 +1,4 @@
+from application.user import User
 from database.database import Database
 
 
@@ -7,5 +8,5 @@ class Application:
 		self.database = Database('application/schema.txt')
 
 	def register(self, username: str, password: str) -> None:
-		# 
+		# ...
 		pass

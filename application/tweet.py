@@ -5,4 +5,4 @@ class Tweet:
 		self.text = text
 		self.author = author
 		self.date = date
-		self.padID = parID
+		self.parID = parID

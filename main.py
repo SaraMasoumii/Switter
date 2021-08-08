@@ -7,6 +7,6 @@ t = d._tables['User']
 #row = { 'username' : 'mamad', 'password' : 'amir', 'joined_at' : '2020/01/01' }
 #t.addRow(row)
 
-#print(d.query('DELETE FROM User WHERE username==nesa;'))
+print(d.query('SELECT FROM User WHERE username==sarah OR password==amir;'))
 
 #print(t._rows)
