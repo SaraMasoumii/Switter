@@ -9,7 +9,7 @@ text CHAR(64)
 username CHAR(64)
 retweeter CHAR(64)
 date TIMESTAMP
-par_id CHAR(64)
+parID CHAR(64)
 
 Likes
 username CHAR(64)

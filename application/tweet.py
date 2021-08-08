@@ -17,4 +17,4 @@ class Tweet:
 		self.username = dict['username']
 		self.retweeter = dict['retweeter']
 		self.date = dict['date']
-		self.parID = dict['par_id']
+		self.parID = dict['parID']
