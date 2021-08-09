@@ -1,3 +1,4 @@
+from typing import Text
 from database import *
 from application import *
 

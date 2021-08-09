@@ -4,12 +4,12 @@ password CHAR(64)
 date TIMESTAMP
 
 Tweets
-id UNIQUE CHAR(64)
+id UNIQUE INTEGER
 text CHAR(64)
 username CHAR(64)
 retweeter CHAR(64)
 date TIMESTAMP
-parID CHAR(64)
+parID INTEGER
 
 Likes
 username CHAR(64)
