@@ -26,7 +26,7 @@ a = Application()
 clear()
 print('** Welcome to Switter! ** \n')
 print('Created by Sarah Masoumi.\n')
-while not a.isLoggedIn:
+while not a.isLoggedIn():
 	cm = input("- Choose a command (login/register): ")
 	clear()
 	if cm == 'login':
@@ -52,5 +52,5 @@ while not a.isLoggedIn:
 				except:
 					print('\nPlease try again!\n')
 	else:
-		print("\nInvalid Command!\nPlease try again!\n")
+		print("Invalid Command!\nPlease try again!\n")
 		continue
