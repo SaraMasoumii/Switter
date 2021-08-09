@@ -101,27 +101,25 @@ while True:
 		cm = input("- Choose a command (login/register): ")
 		clear()
 		if cm == 'login':
-			while True:
-				username = input('- Username: ')
-				password = input('- Password: ')
+			username = input('- Username: ')
+			password = input('- Password: ')
+			try:
+				a.login(username, password)
+				break
+			except:
+				print('\nPlease try again!\n')
+		elif cm == 'register':
+			username = input('- Enter your username: ')
+			password = input('- Enter your password: ')
+			check_password = input('- ReEnter your password: ')
+			if password != check_password:
+				print("Passwords don't match!\nPlease try again!")
+			else:
 				try:
-					a.login(username, password)
+					a.register(username, password)
 					break
 				except:
-					print('\nPlease try again!\n')
-		elif cm == 'register':
-			while True:
-				username = input('- Enter your username: ')
-				password = input('- Enter your password: ')
-				check_password = input('- ReEnter your password: ')
-				if password != check_password:
-					print("Passwords don't match!\nPlease try again!")
-				else:
-					try:
-						a.register(username, password)
-						break
-					except:
-						print('Please try again!')
+					print('Please try again!')
 		else:
 			print("Invalid Command!\nPlease try again!")
 			continue
