@@ -5,7 +5,7 @@ date TIMESTAMP
 
 Tweets
 id UNIQUE INTEGER
-text CHAR(64)
+text CHAR(200)
 username CHAR(64)
 retweeter CHAR(64)
 date TIMESTAMP
