@@ -69,23 +69,23 @@ class Database:
 		que = query.split(' WHERE ')
 		tableName = que[0].split()[-1]
 		table = self._tables[tableName]
-		ids: Set[str] = self.__where(table, que[1][:-1])
+		ids: Set[str] = self.__where(table, que[1])
 		return table.getRows(ids)
 
 	def __delete(self, query: str) -> None:
 		que = query.split(' WHERE ')
 		tableName = que[0].split()[-1]
 		table = self._tables[tableName]
-		ids: Set[str] = self.__where(table, que[1][:-1])
+		ids: Set[str] = self.__where(table, que[1])
 		table.deleteRows(ids)
 
 	def __update(self, query: str) -> None:
 		que1 = query.split(' WHERE ')
 		que2 = que1[1].split(' VALUES ')
-		que3 = que2[1][1 : -2]
+		que3 = que2[1][1 : -1]
 		tableName = que1[0].split()[-1]
 		table = self._tables[tableName]
-		ids: Set[str] = self.__where(table, que2[0][:-1])
+		ids: Set[str] = self.__where(table, que2[0])
 
 		if len(ids) > 1:
 			raise ValueError('There are more than one row with this conditions!')
@@ -110,8 +110,8 @@ class Database:
 		valueList = []
 		tmp = ''
 		value = qlist[-1]
-		for i in range(1, len(value) - 1):
-			if value[i] != ',' and i != len(value) - 2:
+		for i in range(1, len(value)):
+			if value[i] != ',' and i != len(value) - 1:
 				tmp += value[i]
 
 			else:
@@ -126,6 +126,9 @@ class Database:
 	def query(self, query: str):
 		if query[-1] != ';':
 			raise ValueError('Need a ; in the end of query')
+
+		else:
+			query = query[:-1]
 
 		if 'INSERT INTO' in query:
 			return self.__insert(query)

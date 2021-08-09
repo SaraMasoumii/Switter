@@ -11,6 +11,9 @@ class Field:
 
     def isValueble(self, value: str) -> bool:
 
+        if ' ' in value:
+            return False
+
         t = self.type
         if t == 'INTEGER':
             try:
