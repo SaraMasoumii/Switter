@@ -3,11 +3,33 @@ from database import *
 from application import *
 
 a = Application()
-d = a.database
-t = d._tables['Users']
-#row = { 'username' : 'mamad', 'password' : 'amir', 'joined_at' : '2020/01/01' }
-#t.addRow(row)
+print('Welcome to Switter\n')
+print('Choose a command:\n Enter 1 for login\n Enter 2 for register')
+cm = int(input())
 
-print(d.query('SELECT FROM Users WHERE username==sarah OR password==amir;'))
+if cm == 1:
+    while True:
+        username = input('Username:')
+        password = input('password:')
+        try:
+            a.login(username, password)
+            break
 
-#print(t._rows)
+        except:
+            print('Please try again')
+
+else:
+    while True:
+        username = input('Enter your username:')
+        password = input('Enter your password:')
+        check_password = input('ReEnter your password:')
+        if password != check_password:
+            print("passwords don't match!\nPlease try again")
+
+        else:
+            try:
+                a.register(username, password)
+                break
+
+            except:
+                print('Please try again')
