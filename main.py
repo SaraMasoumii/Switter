@@ -23,12 +23,12 @@ def retweet(parTweet: Tweet):
 	print('The tweet has successfully retweeted')
 
 def like(parTweet: Tweet):
-	if a.hasLiked(tweet):
-		a.like()
-		print('The tweet has successfully liked')
-	else:
-		a.unlike()
+	if a.hasLiked(parTweet):
+		a.unlike(parTweet)
 		print('The tweet has successfully unliked')
+	else:
+		a.like(parTweet)
+		print('The tweet has successfully liked')
 
 def printTweet(tweet: Tweet):
 	print(f"Date: {tweet.date}")
@@ -140,3 +140,6 @@ while True:
 			clear()
 			print("Logged Out!\n")
 			break
+		else:
+			print("Invalid Command!\nPlease try again!")
+			continue
