@@ -85,6 +85,7 @@ class Application:
 	@_auth
 	def tweet(self, text: str) -> Tweet:
 		convertedText = text.replace(' ', '$')
+		convertedText = convertedText.replace(',', '~')
 		tweet = Tweet(id=str(self.latestTweetID + 1), text=text, username=self.user.username, retweeter='0', date=self.getDate(), parID='0')
 		self.database.query(f"INSERT INTO Tweets VALUES ({tweet.id},{convertedText},{tweet.username},{tweet.retweeter},{tweet.date},{tweet.parID});")
 		self.latestTweetID += 1
@@ -93,6 +94,7 @@ class Application:
 	@_auth
 	def mention(self, text: str, parTweet: Tweet) -> Tweet:
 		convertedText = text.replace(' ', '$')
+		convertedText = convertedText.replace(',', '~')
 		tweet = Tweet(id=str(self.latestTweetID + 1), text=text, username=self.user.username, retweeter='0', date=self.getDate(), parID=parTweet.id)
 		self.database.query(f"INSERT INTO Tweets VALUES ({tweet.id},{convertedText},{tweet.username},{tweet.retweeter},{tweet.date},{tweet.parID});")
 		self.latestTweetID += 1
@@ -101,6 +103,7 @@ class Application:
 	@_auth
 	def retweet(self, parTweet: Tweet) -> Tweet:
 		convertedText = parTweet.text.replace(' ', '$')
+		convertedText = convertedText.replace(',', '~')
 		tweet = Tweet(id=str(self.latestTweetID + 1), text=parTweet.text, username=parTweet.username, retweeter=self.user.username, date=self.getDate(), parID='0')
 		self.database.query(f"INSERT INTO Tweets VALUES ({tweet.id},{convertedText},{tweet.username},{tweet.retweeter},{tweet.date},{tweet.parID});")
 		self.latestTweetID += 1
