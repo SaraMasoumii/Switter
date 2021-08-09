@@ -3,43 +3,43 @@ import re
 
 class Field:
 
-    def __init__(self, type: str, unique: bool) -> None:
+	def __init__(self, type: str, unique: bool) -> None:
 
-        self.type = type
-        self.unique = unique
+		self.type = type
+		self.unique = unique
 
 
-    def isValueble(self, value: str) -> bool:
+	def isValueble(self, value: str) -> bool:
 
-        if ' ' in value:
-            return False
+		if ' ' in value:
+			return False
 
-        t = self.type
-        if t == 'INTEGER':
-            try:
-                int(t)
-                return True
-            except:
-                return False
+		t = self.type
+		if t == 'INTEGER':
+			try:
+				int(t)
+				return True
+			except:
+				return False
 
-        elif t == 'BOOLEAN':
-            return t == '1' or t == '0'
+		elif t == 'BOOLEAN':
+			return t == '1' or t == '0'
 
-        elif t == 'TIMESTAMP':
+		elif t == 'TIMESTAMP':
 
-            if type(value) != str:
-                return False
+			if type(value) != str:
+				return False
 
-            try:
-                datetime.datetime.strptime(value, '%Y/%m/%d')
-                return True
+			try:
+				datetime.datetime.strptime(value, '%Y/%m/%d')
+				return True
 
-            except ValueError:
-                return False
+			except ValueError:
+				return False
 
-        elif re.match('^CHAR\((\d+)\)$', t):
+		elif re.match('^CHAR\((\d+)\)$', t):
 
-            l = int(re.findall("CHAR\((\d+)\)", t)[0])
-            return type(value) == str and len(value) <= l
+			l = int(re.findall("CHAR\((\d+)\)", t)[0])
+			return type(value) == str and len(value) <= l
 
-        return False
+		return False

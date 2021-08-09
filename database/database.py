@@ -61,7 +61,6 @@ class Database:
 				lastOperator = tmp
 		return finalSet
 
-
 	def __where(self, table: Table, query: str) -> Set[str]:
 		return self.__simpleWhere(table, query)
 
@@ -69,6 +68,8 @@ class Database:
 		que = query.split(' WHERE ')
 		tableName = que[0].split()[-1]
 		table = self._tables[tableName]
+		if ' WHERE ' not in query:
+			return table.getAllRows()
 		ids: Set[str] = self.__where(table, que[1])
 		return table.getRows(ids)
 
@@ -126,7 +127,6 @@ class Database:
 	def query(self, query: str):
 		if query[-1] != ';':
 			raise ValueError('Need a ; in the end of query')
-
 		else:
 			query = query[:-1]
 

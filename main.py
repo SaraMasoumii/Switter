@@ -1,35 +1,56 @@
-from typing import Text
-from database import *
+import os
+import sys
 from application import *
+from database import *
+
+def clear():
+	os.system('cls||clear')
+
+def printTweet(tweet: Tweet):
+	print(f"Date: {tweet.date}\n")
+	if tweet.retweeter != '0':
+		print(f"ReTweeted by @{tweet.retweeter}:\n")
+	print(f"@{tweet.username}:\n")
+	print(f"{tweet.text}:\n")
+
+def showTweets(tweets: List[Tweet]):
+	if len(tweets) == 0:
+		print("Nothing to show here!")
+		return
+	idx = len(tweets) - 1
+	while True:
+		showTweets(tweets[idx])
+
 
 a = Application()
-print('Welcome to Switter\n')
-print('Choose a command:\n Enter 1 for login\n Enter 2 for register')
-cm = int(input())
-
-if cm == 1:
-    while True:
-        username = input('Username:')
-        password = input('password:')
-        try:
-            a.login(username, password)
-            break
-
-        except:
-            print('Please try again')
-
-else:
-    while True:
-        username = input('Enter your username:')
-        password = input('Enter your password:')
-        check_password = input('ReEnter your password:')
-        if password != check_password:
-            print("passwords don't match!\nPlease try again")
-
-        else:
-            try:
-                a.register(username, password)
-                break
-
-            except:
-                print('Please try again')
+clear()
+print('** Welcome to Switter! ** \n')
+print('Created by Sarah Masoumi.\n')
+while not a.isLoggedIn:
+	cm = input("- Choose a command (login/register): ")
+	clear()
+	if cm == 'login':
+		while True:
+			username = input('- Username: ')
+			password = input('- Password: ')
+			try:
+				a.login(username, password)
+				break
+			except:
+				print('\nPlease try again!\n')
+	elif cm == 'register':
+		while True:
+			username = input('- Enter your username: ')
+			password = input('- Enter your password: ')
+			check_password = input('- ReEnter your password: ')
+			if password != check_password:
+				print("\nPasswords don't match!\nPlease try again!\n")
+			else:
+				try:
+					a.register(username, password)
+					break
+				except:
+					print('\nPlease try again!\n')
+	else:
+		print("\nInvalid Command!\nPlease try again!\n")
+		continue

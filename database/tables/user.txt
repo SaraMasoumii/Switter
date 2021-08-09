@@ -1,4 +1,0 @@
-# username password joined_at
-3ed8fabb-72d7-4539-b15d-2f7f1fb58865 melina sarah 2020/01/01
-ac68a887-1e9c-486d-9896-18c2bc83fe7f sarah nesa 2020/01/01
-136a7275-c5f6-441f-a2bd-c60c36453647 yasna amir 2020/01/01

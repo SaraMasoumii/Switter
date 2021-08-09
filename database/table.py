@@ -89,6 +89,12 @@ class Table:
 	def getRows(self, ids: Set[str]) -> List[Dict[str, str]]:
 		return [self.getRow(id) for id in ids]
 
+	def getAllRows(self) -> List[Dict[str, str]]:
+		rows = []
+		for id, row in self._rows.items():
+			rows.append(row)
+		return rows
+
 	def deleteRow(self, id: str) -> None:
 		if id not in self._rows:
 			raise ValueError("ID doesn't exist!")
