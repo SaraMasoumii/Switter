@@ -51,6 +51,7 @@ class Database:
 				value = value.replace('"', '')
 				value = value.replace("'", '')
 				currentSet = table.selectRows(equal, key, value)
+
 				if lastOperator == 'OR':
 					finalSet = finalSet | currentSet
 				elif lastOperator == 'AND':

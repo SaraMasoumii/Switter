@@ -12,5 +12,5 @@ date TIMESTAMP
 parID INTEGER
 
 Likes
+id INTEGER
 username CHAR(64)
-id CHAR(64)

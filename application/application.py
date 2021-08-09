@@ -43,8 +43,16 @@ class Application:
 			tweets.append(tweet)
 		return tweets
 
-	def getAllTweets(self) -> List[Tweet]:
+	def getTimeline(self) -> List[Tweet]:
 		list = self.database.query("SELECT FROM Tweets WHERE parID==0;")
+		tweets = []
+		for dic in list:
+			tweet = Tweet(**dic)
+			tweets.append(tweet)
+		return tweets
+
+	def getAllTweets(self) -> List[Tweet]:
+		list = self.database.query("SELECT FROM Tweets;")
 		tweets = []
 		for dic in list:
 			tweet = Tweet(**dic)
@@ -60,7 +68,8 @@ class Application:
 		return likes
 
 	def getMentionsFromTweet(self, tweet: Tweet) -> List[Tweet]:
-		list = self.database.query(f"SELECT FROM Tweets WHERE parID=={tweet.parID};")
+		list = self.database.query(f"SELECT FROM Tweets WHERE parID=={tweet.id};")
+		print(tweet.parID, list)
 		mentions = []
 		for dic in list:
 			mention = Tweet(**dic)
@@ -91,9 +100,9 @@ class Application:
 		return tweet
 	
 	@_auth
-	def retweet(self, tweet: Tweet) -> Tweet:
-		convertedText = tweet.text.replace(' ', '$')
-		tweet = Tweet(id=str(self.latestTweetID + 1), text=tweet.text, username=tweet.username, retweeter=self.user.username, date=self.getDate(), parID='0')
+	def retweet(self, parTweet: Tweet) -> Tweet:
+		convertedText = parTweet.text.replace(' ', '$')
+		tweet = Tweet(id=str(self.latestTweetID + 1), text=parTweet.text, username=parTweet.username, retweeter=self.user.username, date=self.getDate(), parID='0')
 		self.database.query(f"INSERT INTO Tweets VALUES ({tweet.id},{convertedText},{tweet.username},{tweet.retweeter},{tweet.date},{tweet.parID});")
 		self.latestTweetID += 1
 		return tweet

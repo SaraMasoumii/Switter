@@ -1,5 +1,5 @@
 import os
-import sys
+
 from application import *
 from database import *
 
@@ -8,67 +8,15 @@ a = Application()
 def clear():
 	os.system('cls||clear')
 
-def printTweet(tweet: Tweet):
-	print(f"Date: {tweet.date}\n")
-	if tweet.retweeter != '0':
-		print(f"ReTweeted by @{tweet.retweeter}:\n")
-	print(f"@{tweet.username}:\n")
-	print(f"{tweet.text}:\n")
-
-def showLikes(tweet: Tweet):
-	likes = a.getLikesFromTweet(tweet)
-
-def showTweets(tweets: List[Tweet]):
-	if len(tweets) == 0:
-		print("Nothing to show here!\n")
-		return
-	idx = len(tweets) - 1
-	while True:
-		clear()
-		tweet = tweets[idx]
-		printTweet(tweet)
-		while True:
-			cm = input("- Choose a command (next/prev/back/like/retweet/mention/showlikes/showmentions): ")
-			if cm == 'next':
-				if idx - 1 >= 0:
-					idx -= 1
-					break
-				else:
-					print("\nYou have reached the end!\n")
-					continue
-			elif cm == 'prev':
-				if idx + 1 < len(tweets):
-					idx += 1
-					break
-				else:
-					print("\nYou have reached the top!\n")
-					continue
-			elif cm == 'back':
-				clear()
-				return
-			elif cm == 'like':
-				pass
-			elif cm == 'retweet':
-				pass
-			elif cm == 'mention':
-				pass
-			elif cm == 'showlikes':
-				pass
-			elif cm == 'showmentions':
-				mentions = a.getMentionsFromTweet(tweet)
-				showTweets(mentions)
-
 def tweet():
-	text = input('Enter your Tweet:')
+	text = input('- Enter your Tweet: ')
 	a.tweet(text)
 	print('Your tweet is successfully tweeted.')
 
-
 def mention(parTweet: Tweet):
-	text = input('Enter your mention:')
+	text = input('- Enter your mention: ')
 	a.mention(text, parTweet)
 	print('Your mention is successfully mentioned')
-
 
 def retweet(parTweet: Tweet):
 	a.retweet(parTweet)
@@ -77,9 +25,72 @@ def retweet(parTweet: Tweet):
 def like(parTweet: Tweet):
 	a.like(parTweet)
 
+def printTweet(tweet: Tweet):
+	print(f"Date: {tweet.date}")
+	if tweet.retweeter != '0':
+		print(f"ReTweeted by @{tweet.retweeter}:")
+	print(f"@{tweet.username}:")
+	print(f"{tweet.text}\n")
+
+def printLike(like: Like):
+	print(f"@{like.username}")
+
+def showLikes(tweet: Tweet):
+	likes = a.getLikesFromTweet(tweet)
+	if len(likes) == 0:
+		print("No one has liked this tweet yet!")
+	else:
+		for like in likes:
+			printLike(like)
+
+def showTweets(tweets: List[Tweet]):
+	if len(tweets) == 0:
+		print("Nothing to show here!\n")
+		return
+	idx = len(tweets) - 1
+	while True:
+		tweet = tweets[idx]
+		clear()
+		printTweet(tweet)
+		while True:
+			cm = input("- Choose a command (next/prev/back/retweet/like/mention/likes/mentions): ")
+			if cm == 'next':
+				if idx - 1 >= 0:
+					idx -= 1
+					break
+				else:
+					print("You have reached the end!")
+					continue
+			elif cm == 'prev':
+				if idx + 1 < len(tweets):
+					idx += 1
+					break
+				else:
+					print("You have reached the top!")
+					continue
+			elif cm == 'back':
+				clear()
+				return
+			elif cm == 'like':
+				like(tweet)
+			elif cm == 'retweet':
+				retweet(tweet)
+			elif cm == 'mention':
+				mention(tweet)
+			elif cm == 'likes':
+				showLikes(tweet)
+			elif cm == 'mentions':
+				mentions = a.getMentionsFromTweet(tweet)
+				showTweets(mentions)
+				break
+			else:
+				print("Invalid Command!\nPlease try again!")
+
+
 clear()
 print('** Welcome to Switter! ** \n')
 print('Created by Sarah Masoumi.\n')
+
 while not a.isLoggedIn():
 	cm = input("- Choose a command (login/register): ")
 	clear()
@@ -109,11 +120,15 @@ while not a.isLoggedIn():
 		print("Invalid Command!\nPlease try again!\n")
 		continue
 
+clear()
+print("Logged In!\n")
+
 while True:
-	cm = input("- Choose a command (timeline/tweet/logut): ")
+	cm = input("- Choose a command (timeline/tweet/logout): ")
 	if cm == 'timeline':
-		showTweets(a.getAllTweets())
+		showTweets(a.getTimeline())
 	elif cm == 'tweet':
-		pass
+		tweet()
 	elif cm == 'logout':
 		a.logout()
+		exit()
