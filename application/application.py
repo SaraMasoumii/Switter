@@ -69,7 +69,6 @@ class Application:
 
 	def getMentionsFromTweet(self, tweet: Tweet) -> List[Tweet]:
 		list = self.database.query(f"SELECT FROM Tweets WHERE parID=={tweet.id};")
-		print(tweet.parID, list)
 		mentions = []
 		for dic in list:
 			mention = Tweet(**dic)
@@ -112,3 +111,14 @@ class Application:
 		like = Like(id=tweet.id, username=self.user.username)
 		self.database.query(f"INSERT INTO Likes VALUES ({like.id},{like.username});")
 		return like
+
+	@_auth
+	def unlike(self, tweet: Tweet):
+		like = Like(id=tweet.id, username=self.user.username)
+		self.database.query(f"DELETE FROM Likes WHERE id=={like.id} AND username=={like.username});")
+
+	@_auth
+	def hasLiked(self, tweet: Tweet) -> bool:
+		like = Like(id=tweet.id, username=self.user.username)
+		list = self.database.query(f"SELECT FROM Likes WHERE id=={like.id} AND username=={like.username});")
+		return len(list) != 0

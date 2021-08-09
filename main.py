@@ -11,19 +11,24 @@ def clear():
 def tweet():
 	text = input('- Enter your Tweet: ')
 	a.tweet(text)
-	print('Your tweet is successfully tweeted.')
+	print('Your tweet has successfully tweeted.')
 
 def mention(parTweet: Tweet):
 	text = input('- Enter your mention: ')
 	a.mention(text, parTweet)
-	print('Your mention is successfully mentioned')
+	print('Your mention has successfully mentioned')
 
 def retweet(parTweet: Tweet):
 	a.retweet(parTweet)
-	print('The tweet is successfully retweeted')
+	print('The tweet has successfully retweeted')
 
 def like(parTweet: Tweet):
-	a.like(parTweet)
+	if a.hasLiked(tweet):
+		a.like()
+		print('The tweet has successfully liked')
+	else:
+		a.unlike()
+		print('The tweet has successfully unliked')
 
 def printTweet(tweet: Tweet):
 	print(f"Date: {tweet.date}")
@@ -45,7 +50,7 @@ def showLikes(tweet: Tweet):
 
 def showTweets(tweets: List[Tweet]):
 	if len(tweets) == 0:
-		print("Nothing to show here!\n")
+		print("Nothing to show here!")
 		return
 	idx = len(tweets) - 1
 	while True:
@@ -91,44 +96,47 @@ clear()
 print('** Welcome to Switter! ** \n')
 print('Created by Sarah Masoumi.\n')
 
-while not a.isLoggedIn():
-	cm = input("- Choose a command (login/register): ")
-	clear()
-	if cm == 'login':
-		while True:
-			username = input('- Username: ')
-			password = input('- Password: ')
-			try:
-				a.login(username, password)
-				break
-			except:
-				print('\nPlease try again!\n')
-	elif cm == 'register':
-		while True:
-			username = input('- Enter your username: ')
-			password = input('- Enter your password: ')
-			check_password = input('- ReEnter your password: ')
-			if password != check_password:
-				print("\nPasswords don't match!\nPlease try again!\n")
-			else:
+while True:
+	while not a.isLoggedIn():
+		cm = input("- Choose a command (login/register): ")
+		clear()
+		if cm == 'login':
+			while True:
+				username = input('- Username: ')
+				password = input('- Password: ')
 				try:
-					a.register(username, password)
+					a.login(username, password)
 					break
 				except:
 					print('\nPlease try again!\n')
-	else:
-		print("Invalid Command!\nPlease try again!\n")
-		continue
+		elif cm == 'register':
+			while True:
+				username = input('- Enter your username: ')
+				password = input('- Enter your password: ')
+				check_password = input('- ReEnter your password: ')
+				if password != check_password:
+					print("Passwords don't match!\nPlease try again!")
+				else:
+					try:
+						a.register(username, password)
+						break
+					except:
+						print('Please try again!')
+		else:
+			print("Invalid Command!\nPlease try again!")
+			continue
 
-clear()
-print("Logged In!\n")
+	clear()
+	print("Logged In!\n")
 
-while True:
-	cm = input("- Choose a command (timeline/tweet/logout): ")
-	if cm == 'timeline':
-		showTweets(a.getTimeline())
-	elif cm == 'tweet':
-		tweet()
-	elif cm == 'logout':
-		a.logout()
-		exit()
+	while True:
+		cm = input("- Choose a command (timeline/tweet/logout): ")
+		if cm == 'timeline':
+			showTweets(a.getTimeline())
+		elif cm == 'tweet':
+			tweet()
+		elif cm == 'logout':
+			a.logout()
+			clear()
+			print("Logged Out!\n")
+			break
