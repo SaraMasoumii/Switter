@@ -58,19 +58,24 @@ def showTweets(tweets: List[Tweet]):
 				mentions = a.getMentionsFromTweet(tweet)
 				showTweets(mentions)
 
-def tweet(text: str):
+def tweet():
+	text = input('Enter your Tweet:')
 	a.tweet(text)
 	print('Your tweet is successfully tweeted.')
 
-def mention(text: str, parTweet: Tweet):
+
+def mention(parTweet: Tweet):
+	text = input('Enter your mention:')
 	a.mention(text, parTweet)
 	print('Your mention is successfully mentioned')
 
-def retweet(parTweet: Tweet):
-	pass
 
-def like():
-	pass
+def retweet(parTweet: Tweet):
+	a.retweet(parTweet)
+	print('The tweet is successfully retweeted')
+
+def like(parTweet: Tweet):
+	a.like(parTweet)
 
 clear()
 print('** Welcome to Switter! ** \n')
