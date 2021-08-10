@@ -65,14 +65,12 @@ def showTweets(tweets: List[Tweet]):
 					break
 				else:
 					print("You have reached the end!")
-					continue
 			elif cm == 'prev':
 				if idx + 1 < len(tweets):
 					idx += 1
 					break
 				else:
 					print("You have reached the top!")
-					continue
 			elif cm == 'back':
 				clear()
 				return
@@ -86,8 +84,11 @@ def showTweets(tweets: List[Tweet]):
 				showLikes(tweet)
 			elif cm == 'mentions':
 				mentions = a.getMentionsFromTweet(tweet)
-				showTweets(mentions)
-				break
+				if len(mentions) == 0:
+					print('There is no mention!')
+				else:
+					showTweets(mentions)
+					break
 			else:
 				print("Invalid Command!\nPlease try again!")
 
