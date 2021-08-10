@@ -13,7 +13,11 @@ class Application:
 	def __init__(self) -> None:
 		self.database = Database('application/schema.txt')
 		self.user = None
-		self.latestTweetID = max(tweet.id for tweet in self.getAllTweets())
+		tweets = self.getAllTweets()
+		if len(tweets) == 0:
+			self.latestTweetID = 0
+		else:
+			self.latestTweetID = max(int(tweet.id) for tweet in tweets)
 
 	def getDate(self): 
 		return datetime.today().strftime('%Y/%m/%d')
