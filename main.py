@@ -6,7 +6,7 @@ from database import *
 a = Application()
 
 def clear():
-	os.system('cls||clear')
+	os.system('cls' if os.name == 'nt' else 'clear')
 
 def tweet():
 	text = input('- Enter your Tweet: ')
@@ -52,6 +52,7 @@ def showTweets(tweets: List[Tweet]):
 	if len(tweets) == 0:
 		print("Nothing to show here!")
 		return
+	tweets = sorted(tweets, key=lambda t: t.id)
 	idx = len(tweets) - 1
 	while True:
 		tweet = tweets[idx]
@@ -99,7 +100,7 @@ print('Created by Sarah Masoumi.\n')
 
 while True:
 	while not a.isLoggedIn():
-		cm = input("- Choose a command (login/register): ")
+		cm = input("- Choose a command (login/register/exit): ")
 		clear()
 		if cm == 'login':
 			username = input('- Username: ')
@@ -121,6 +122,9 @@ while True:
 					break
 				except:
 					print('Please try again!')
+		elif cm == 'exit':
+			print('Goodbye!')
+			exit()
 		else:
 			print("Invalid Command!\nPlease try again!")
 			continue
